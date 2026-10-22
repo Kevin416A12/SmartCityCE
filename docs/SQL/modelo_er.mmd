@@ -1,0 +1,70 @@
+erDiagram
+    UBICACION ||--o{ EDIFICIO : contiene
+    UBICACION ||--o{ SENSOR : alberga
+    ORGANISMO_RESPONSABLE ||--o{ SENSOR : administra
+    CATEGORIA_SENSOR ||--o{ SENSOR : clasifica
+    EDIFICIO o|--o{ SENSOR : tiene
+    SENSOR ||--o{ LECTURA_SQL : produce
+    UBICACION ||--o{ REGISTRO_METEOROLOGICO : contextualiza
+
+    UBICACION {
+        bigint id_ubicacion PK
+        varchar nombre_zona
+        varchar distrito
+        decimal latitud
+        decimal longitud
+        varchar zona_horaria
+    }
+    EDIFICIO {
+        varchar id_edificio PK
+        varchar id_sitio_origen
+        bigint id_ubicacion FK
+        varchar uso_principal
+        varchar subuso
+        decimal superficie_m2
+        integer anio_construccion
+    }
+    CATEGORIA_SENSOR {
+        bigint id_categoria PK
+        varchar nombre_categoria
+        varchar unidad_base
+    }
+    ORGANISMO_RESPONSABLE {
+        bigint id_organismo PK
+        varchar nombre
+        varchar responsable
+    }
+    SENSOR {
+        bigint id_sensor PK
+        varchar nombre
+        varchar tipo_sensor
+        date fecha_instalacion
+        varchar estado
+        bigint id_categoria FK
+        bigint id_ubicacion FK
+        bigint id_organismo FK
+        varchar id_edificio FK
+        varchar identificador_fuente
+    }
+    USUARIO_SISTEMA {
+        bigint id_usuario PK
+        varchar nombre
+        varchar correo
+    }
+    LECTURA_SQL {
+        bigint id_lectura PK
+        bigint id_sensor FK
+        timestamp fecha_hora
+        decimal valor
+        varchar fuente
+    }
+    REGISTRO_METEOROLOGICO {
+        bigint id_registro PK
+        bigint id_ubicacion FK
+        timestamp fecha_hora
+        decimal temperatura_c
+        decimal humedad_relativa_pct
+        decimal precipitacion_mm
+        decimal nubosidad_pct
+        decimal viento_kmh
+    }
