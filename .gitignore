@@ -1,0 +1,11 @@
+# Datasets originales y procesados
+/data/raw/
+/data/processed/
+/data/synthetic/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Variables de entorno
+.env
