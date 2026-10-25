@@ -6,6 +6,6 @@
 # Archivos temporales de Python
 __pycache__/
 *.pyc
-
+.venv/
 # Variables de entorno
 .env
