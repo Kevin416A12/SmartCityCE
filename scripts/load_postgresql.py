@@ -71,7 +71,7 @@ def integer(v):
 def connect():
     load_dotenv(ROOT / '.env')
     return psycopg2.connect(host=os.getenv('DB_HOST', 'localhost'),
-                            port=os.getenv('DB_PORT', '5433'),
+                            port=os.getenv('DB_PORT', '5432'),
                             dbname=os.getenv('DB_NAME', 'smartcityce'),
                             user=os.getenv('DB_USER', 'smartcity'),
                             password=os.getenv('DB_PASSWORD'),
