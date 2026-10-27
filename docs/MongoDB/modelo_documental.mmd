@@ -1,0 +1,99 @@
+classDiagram
+
+class Lectura {
+    ObjectId _id
+    int id_sensor
+    Date fecha_hora
+    object medicion
+    object ubicacion
+    object sensor
+    object metadatos
+}
+
+class Medicion {
+    double valor
+    string unidad
+}
+
+class UbicacionLectura {
+    int id_ubicacion
+    string zona
+}
+
+class SensorResumen {
+    string tipo
+    string categoria
+}
+
+class MetadatosLectura {
+    string fuente
+    string calidad
+}
+
+class Meteorologia {
+    ObjectId _id
+    Date fecha_hora
+    object ubicacion
+    object mediciones
+    object metadatos
+}
+
+class MedicionesMeteorologicas {
+    double temperatura
+    double humedad
+    double precipitacion
+}
+
+class Evento {
+    ObjectId _id
+    int id_sensor
+    Date fecha_hora
+    string tipo_evento
+    string categoria
+    string severidad
+    string descripcion
+    object ubicacion
+    object datos
+    object metadatos
+}
+
+class Alerta {
+    ObjectId _id
+    ObjectId id_evento
+    int id_sensor
+    Date fecha_hora
+    string tipo_alerta
+    string nivel
+    string mensaje
+    object ubicacion
+    string estado
+    object metadatos
+}
+
+class Incidente {
+    ObjectId _id
+    Date fecha_hora
+    string categoria
+    string tipo_incidente
+    string severidad
+    string descripcion
+    object ubicacion
+    array sensores_relacionados
+    string estado
+    object datos_adicionales
+    object metadatos
+}
+
+Lectura *-- Medicion : contiene
+Lectura *-- UbicacionLectura : embebe
+Lectura *-- SensorResumen : embebe
+Lectura *-- MetadatosLectura : embebe
+
+Meteorologia *-- UbicacionLectura : embebe
+Meteorologia *-- MedicionesMeteorologicas : contiene
+
+Evento *-- UbicacionLectura : embebe
+Alerta *-- UbicacionLectura : embebe
+Incidente *-- UbicacionLectura : embebe
+
+Evento --> Alerta : puede_generar
