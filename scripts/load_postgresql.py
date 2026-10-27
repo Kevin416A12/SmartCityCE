@@ -193,8 +193,8 @@ def load_weather(conn, path, site):
     head = pd.read_csv(path, skiprows=skip, nrows=0).columns.tolist()
     src = {'temperatura': weather_column(head, 'temperature_2m'),
            'humedad': weather_column(head, 'relative_humidity_2m'),
-           'precipitacion': weather_column(head, 'precipitation ('),
-           'nubosidad': weather_column(head, 'cloud_cover ('),
+           'precipitacion': weather_column(head, 'precipitation'),
+           'nubosidad': weather_column(head, 'cloud_cover'),
            'viento': weather_column(head, 'wind_speed_10m')}
     if any(v is None for v in src.values()):
         raise ValueError(f'Faltan variables meteorológicas: {[k for k,v in src.items() if v is None]}. Encabezados: {head}')
