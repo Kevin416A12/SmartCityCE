@@ -9,7 +9,7 @@ set -Eeuo pipefail
 
 DB_NAME="smartcityce"
 DB_USER="smartcity"
-DB_PASSWORD="Poner_contraseña_segura_aquí"  # Cambiar a una contraseña segura antes de ejecutar
+DB_PASSWORD="ZXCV1234"  # Cambiar a una contraseña segura antes de ejecutar
 
 if ! command -v psql >/dev/null 2>&1; then
   echo "Error: psql no está instalado. Instala PostgreSQL primero." >&2
