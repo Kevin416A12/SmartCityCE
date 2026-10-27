@@ -21,9 +21,7 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 
 
-# ============================================================
 # Rutas del proyecto
-# ============================================================
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,9 +45,7 @@ METADATA_CSV = (
 )
 
 
-# ============================================================
 # Funciones auxiliares
-# ============================================================
 
 def cargar_metadatos():
     """
@@ -170,19 +166,14 @@ def crear_documento(
     }
 
 
-# ============================================================
 # Carga principal
-# ============================================================
 
 def cargar_lecturas(limite, tamano_lote, reiniciar):
     """
     Transforma las lecturas del CSV e inserta los documentos
     en MongoDB por lotes.
-    """
-
-    # --------------------------------------------------------
-    # Configuración
-    # --------------------------------------------------------
+    """----
+    # Configuració----
 
     load_dotenv(ROOT / ".env")
 
@@ -198,11 +189,8 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
         raise RuntimeError(
             "Faltan MONGO_ROOT_USER o "
             "MONGO_ROOT_PASSWORD en .env"
-        )
-
-    # --------------------------------------------------------
-    # Verificación de archivos
-    # --------------------------------------------------------
+        )----
+    # Verificación de archivo----
 
     if not LECTURAS_CSV.exists():
         raise FileNotFoundError(
@@ -214,11 +202,8 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
         raise FileNotFoundError(
             f"No se encontró el archivo de metadatos: "
             f"{METADATA_CSV}"
-        )
-
-    # --------------------------------------------------------
-    # Conexión con MongoDB
-    # --------------------------------------------------------
+        )----
+    # Conexión con MongoD----
 
     uri = (
         f"mongodb://{usuario}:{password}"
@@ -234,30 +219,21 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
 
     print("Conectado a MongoDB.")
     print(f"Base de datos: {nombre_bd}")
-    print("Colección: lecturas")
-
-    # --------------------------------------------------------
-    # Reinicio opcional
-    # --------------------------------------------------------
+    print("Colección: lecturas")----
+    # Reinicio opciona----
 
     if reiniciar:
         coleccion.drop()
-        print("Colección 'lecturas' reiniciada.")
-
-    # --------------------------------------------------------
-    # Metadatos
-    # --------------------------------------------------------
+        print("Colección 'lecturas' reiniciada.")----
+    # Metadato----
 
     metadatos = cargar_metadatos()
 
     print(
         f"Metadatos disponibles: "
         f"{len(metadatos):,}"
-    )
-
-    # --------------------------------------------------------
-    # Procesamiento
-    # --------------------------------------------------------
+    )----
+    # Procesamient----
 
     insertados = 0
     omitidos = 0
@@ -322,9 +298,7 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
 
                     lote.append(documento)
 
-                    # ----------------------------------------
                     # Inserción por lotes
-                    # ----------------------------------------
 
                     if len(lote) >= tamano_lote:
 
@@ -341,9 +315,7 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
                             f"{insertados:,}"
                         )
 
-                    # ----------------------------------------
                     # Límite solicitado
-                    # ----------------------------------------
 
                     if (
                         limite is not None
@@ -359,9 +331,7 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
                 ):
                     break
 
-        # ----------------------------------------------------
         # Último lote
-        # ----------------------------------------------------
 
         if lote:
 
@@ -377,9 +347,7 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
 
                 insertados += len(lote)
 
-        # ----------------------------------------------------
         # Resultado
-        # ----------------------------------------------------
 
         print()
         print("Carga finalizada.")
@@ -396,9 +364,7 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
         cliente.close()
 
 
-# ============================================================
 # Argumentos
-# ============================================================
 
 def main():
 
