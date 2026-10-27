@@ -172,8 +172,8 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
     """
     Transforma las lecturas del CSV e inserta los documentos
     en MongoDB por lotes.
-    """----
-    # Configuració----
+    """
+    # Configuració
 
     load_dotenv(ROOT / ".env")
 
@@ -189,8 +189,8 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
         raise RuntimeError(
             "Faltan MONGO_ROOT_USER o "
             "MONGO_ROOT_PASSWORD en .env"
-        )----
-    # Verificación de archivo----
+        )
+    # Verificación de archivo
 
     if not LECTURAS_CSV.exists():
         raise FileNotFoundError(
@@ -202,8 +202,8 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
         raise FileNotFoundError(
             f"No se encontró el archivo de metadatos: "
             f"{METADATA_CSV}"
-        )----
-    # Conexión con MongoD----
+        )
+    # Conexión con MongoD
 
     uri = (
         f"mongodb://{usuario}:{password}"
@@ -219,21 +219,21 @@ def cargar_lecturas(limite, tamano_lote, reiniciar):
 
     print("Conectado a MongoDB.")
     print(f"Base de datos: {nombre_bd}")
-    print("Colección: lecturas")----
-    # Reinicio opciona----
+    print("Colección: lecturas")
+    # Reinicio opciona
 
     if reiniciar:
         coleccion.drop()
-        print("Colección 'lecturas' reiniciada.")----
-    # Metadato----
+        print("Colección 'lecturas' reiniciada.")
+    # Metadato
 
     metadatos = cargar_metadatos()
 
     print(
         f"Metadatos disponibles: "
         f"{len(metadatos):,}"
-    )----
-    # Procesamient----
+    )
+    # Procesamient
 
     insertados = 0
     omitidos = 0
