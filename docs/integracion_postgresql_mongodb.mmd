@@ -1,0 +1,74 @@
+flowchart LR
+
+    %% =========================
+    %% FUENTES
+    %% =========================
+    subgraph FUENTES["Fuentes de datos"]
+        BDG2["BDG2"]
+        OM["Open-Meteo"]
+    end
+
+    ETL["Procesamiento y transformación"]
+
+    BDG2 --> ETL
+    OM --> ETL
+
+    %% =========================
+    %% POSTGRESQL
+    %% =========================
+    subgraph PG["PostgreSQL - Datos maestros y estructurados"]
+        PG_UBI["ubicacion<br/>nombre_zona"]
+        PG_EDI["edificio<br/>id_edificio"]
+        PG_CAT["categoria_sensor<br/>nombre_categoria"]
+        PG_SENSOR["sensor<br/>id_sensor<br/>nombre"]
+        PG_ORG["organismo_responsable"]
+        PG_USER["usuario_sistema"]
+        PG_LECT["lectura_sql"]
+        PG_MET["registro_meteorologico"]
+
+        PG_UBI --> PG_EDI
+        PG_EDI --> PG_SENSOR
+        PG_CAT --> PG_SENSOR
+        PG_ORG --> PG_SENSOR
+        PG_SENSOR --> PG_LECT
+        PG_UBI --> PG_MET
+    end
+
+    %% =========================
+    %% MONGODB
+    %% =========================
+    subgraph MONGO["MongoDB - Datos temporales y semiestructurados"]
+        M_LECT["lecturas<br/>id_sensor<br/>ubicacion<br/>sensor"]
+        M_MET["meteorologia<br/>ubicacion<br/>mediciones"]
+        M_EVENT["eventos<br/>id_sensor<br/>ubicacion"]
+        M_ALERT["alertas<br/>id_evento<br/>id_sensor<br/>ubicacion"]
+        M_INC["incidentes<br/>sensores_relacionados<br/>ubicacion"]
+
+        M_LECT --> M_EVENT
+        M_EVENT --> M_ALERT
+        M_EVENT -. contexto .-> M_INC
+    end
+
+    %% =========================
+    %% CARGA
+    %% =========================
+    ETL --> PG
+    ETL --> MONGO
+
+    %% =========================
+    %% INTEGRACIÓN LÓGICA
+    %% =========================
+
+    M_LECT -. "building_id<br/>lecturas.id_sensor ↔ sensor.nombre" .-> PG_SENSOR
+
+    M_LECT -. "building_id<br/>lecturas.id_sensor ↔ edificio.id_edificio" .-> PG_EDI
+
+    M_LECT -. "site_id / nombre del sitio<br/>ubicacion.zona ↔ ubicacion.nombre_zona" .-> PG_UBI
+
+    M_LECT -. "equivalencia semántica<br/>energia / consumo_electrico ↔ Electricidad" .-> PG_CAT
+
+    M_MET -. "nombre del sitio / ubicación" .-> PG_UBI
+
+    M_EVENT -. "identificador lógico del sensor" .-> PG_SENSOR
+    M_ALERT -. "identificador lógico del sensor" .-> PG_SENSOR
+    M_INC -. "sensores relacionados" .-> PG_SENSOR
