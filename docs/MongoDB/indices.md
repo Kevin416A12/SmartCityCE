@@ -29,5 +29,19 @@ Se definieron cuatro índices adicionales al índice `_id_` creado automáticame
 
 El índice:
 
-```javascript
+
 { id_sensor: 1 }
+
+## Estado de los índices en la base de datos
+
+La consulta `db.lecturas.getIndexes()` ejecutada en la base
+`smartcityce` devolvió el índice predeterminado `_id_`.
+
+Por lo tanto, los índices adicionales descritos en este documento
+no deben considerarse confirmados como creados en la instancia
+verificada. Su existencia y uso deben comprobarse ejecutando el
+script `MongoDB/indexes.js` y consultando nuevamente los índices
+de la colección.
+
+El índice `_id_` es creado automáticamente por MongoDB y permite
+identificar de manera única los documentos mediante su campo `_id`.

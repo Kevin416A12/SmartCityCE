@@ -6,15 +6,20 @@ MongoDB se utiliza en SmartCityCE para almacenar información semiestructurada y
 
 Mientras PostgreSQL mantiene los datos maestros y estructurados del sistema, como sensores, ubicaciones, edificios, categorías y organismos responsables, MongoDB se utiliza para almacenar información que puede crecer rápidamente y cuya estructura puede variar entre distintos tipos de registros.
 
-El modelo documental contempla cinco colecciones principales:
+## Colecciones del modelo
 
-- `lecturas`
-- `meteorologia`
-- `eventos`
-- `alertas`
-- `incidentes`
+El diseño documental contempla las siguientes colecciones:
 
-El diseño busca facilitar consultas temporales, análisis por sensor y zona, agregaciones estadísticas y el almacenamiento de información dinámica sin duplicar innecesariamente el modelo relacional de PostgreSQL.
+- `lecturas`: colección utilizada para almacenar las mediciones de sensores.
+- `meteorologia`: colección propuesta para observaciones meteorológicas.
+- `eventos`: colección propuesta para eventos detectados a partir de mediciones.
+- `alertas`: colección propuesta para notificaciones generadas por reglas o eventos.
+- `incidentes`: colección propuesta para incidentes urbanos.
+
+La colección `lecturas` ha sido verificada en la base de datos
+`smartcityce`. Las demás colecciones forman parte del diseño
+documental descrito en este documento y su implementación debe
+verificarse por separado.
 
 ---
 
@@ -26,34 +31,38 @@ Cada documento representa una lectura realizada por un sensor en un instante det
 
 ### Ejemplo de documento
 
-```javascript
-{
-    _id: ObjectId(),
 
-    id_sensor: 125,
-    fecha_hora: ISODate("2016-01-01T08:15:00Z"),
+{
+    _id: ObjectId("..."),
+    id_sensor: "Panther_parking_Lorriane",
+    fecha_hora: ISODate("2016-01-01T05:00:00.000Z"),
 
     medicion: {
-        valor: 42.73,
-        unidad: "kWh"
+        valor: 0,
+        unidad: "kWh_sum"
     },
 
     ubicacion: {
-        id_ubicacion: 18,
-        zona: "Zona Norte"
+        id_ubicacion: "Panther",
+        zona: "Panther",
+        coordenadas: {
+            latitud: 28.5176885788321,
+            longitud: -81.3790387999998
+        }
     },
 
     sensor: {
         tipo: "energia",
-        categoria: "consumo_electrico"
+        categoria: "consumo_electrico",
+        uso_primario: "Parking"
     },
 
     metadatos: {
         fuente: "BDG2",
-        calidad: "valido"
+        calidad: "limpio",
+        zona_horaria_origen: "US/Eastern"
     }
 }
-```
 
 ### Justificación
 
@@ -321,11 +330,11 @@ El modelo fue diseñado considerando las consultas obligatorias que posteriormen
 | Lecturas de un sensor específico | `lecturas.id_sensor` |
 | Lecturas en un rango de fechas | `lecturas.fecha_hora` |
 | Valores máximos y mínimos | `lecturas.medicion.valor` |
-| Eventos críticos | `eventos.severidad` |
-| Alertas por zona geográfica | `alertas.ubicacion.zona` |
+| Eventos críticos | Colección propuesta `eventos`, campo `severidad` |
+| Alertas por zona geográfica | Colección propuesta `alertas`, campo `ubicacion.zona` |
 | Promedio de mediciones por zona | `lecturas.ubicacion.zona`, `lecturas.medicion.valor` |
 | Promedio por tipo de sensor | `lecturas.sensor.tipo`, `lecturas.medicion.valor` |
-| Incidentes por categoría | `incidentes.categoria` |
+| Incidentes por categoría | Colección propuesta `incidentes`, campo `categoria` |
 | Consulta mediante agregaciones | Diferentes colecciones según el análisis |
 | Consulta con múltiples filtros | Campos temporales, ubicación, sensor, categoría y severidad |
 
@@ -345,7 +354,30 @@ El diagrama representa las cinco colecciones principales, las estructuras embebi
 
 ---
 
-## 11. Conclusión
+## 11 Justificación de MongoDB frente a PostgreSQL
+
+MongoDB se utiliza para almacenar mediciones documentales que incluyen
+información temporal, datos anidados y metadatos asociados a cada
+lectura. Su modelo BSON permite mantener juntos los atributos que
+pertenecen a una misma medición y consultar directamente campos como
+`medicion.valor`, `ubicacion.zona` y `sensor.tipo`.
+
+PostgreSQL complementa esta función al gestionar información
+estructurada y relaciones entre entidades del sistema. En una base
+relacional, las mediciones y sus atributos relacionados pueden
+representarse mediante tablas y claves foráneas; en MongoDB, los
+datos que se consultan conjuntamente pueden agruparse en un documento.
+
+La elección de MongoDB para las lecturas facilita las consultas sobre
+documentos anidados y el uso del Aggregation Framework para resumir
+mediciones por zona, tipo de sensor o intervalo temporal.
+
+Esto no significa que MongoDB sea siempre superior a PostgreSQL.
+PostgreSQL ofrece ventajas para relaciones complejas, restricciones
+referenciales y consultas relacionales. La arquitectura híbrida
+permite utilizar cada tecnología según las necesidades de los datos.
+
+## 12. Conclusión
 
 El modelo documental propuesto utiliza MongoDB para almacenar información que presenta alta frecuencia, variabilidad estructural y crecimiento continuo.
 
