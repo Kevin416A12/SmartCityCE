@@ -90,7 +90,7 @@ Estos datos permiten realizar consultas y análisis sobre el comportamiento del 
 
 <div align="center">
 
-**SmartCityCE — CE-3191 Bases de Datos**
+**SmartCityCE — CE-3101 Bases de Datos**
 
 Instituto Tecnológico de Costa Rica · 2026
 
