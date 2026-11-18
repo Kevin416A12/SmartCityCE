@@ -13,6 +13,7 @@ Es necesario tener instalados:
 - PostgreSQL
 - pip
 - Soporte para entornos virtuales de Python
+- Hadoop (ver guía en docs/Hadoop/instalacion.md)
 
 En Ubuntu, podemos instalar estas herramientas mediante:
 
