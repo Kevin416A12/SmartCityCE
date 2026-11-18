@@ -4,7 +4,7 @@ set -e
 
 # Configuración de Hadoop
 export HADOOP_HOME="${HADOOP_HOME:-$HOME/hadoop}"
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export JAVA_HOME="${HADOOP_JAVA_HOME:-/usr/lib/jvm/java-11-openjdk-amd64}"
 export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
 
 export PATH="$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH"
