@@ -10,6 +10,9 @@
 **II Semestre, 2026**
 
 Kevin Castro Pérez - 2024182200
+Evans Corrales Valverde - 2024182013
+Luis Adrián Prendas Arias - 2023147608
+Yerik Jaslin Castro - 2024231163
 
 
 GitHub: https://github.com/Kevin416A12/SmartCityCE
@@ -90,7 +93,7 @@ Estos datos permiten realizar consultas y análisis sobre el comportamiento del 
 
 <div align="center">
 
-**SmartCityCE — CE-3191 Bases de Datos**
+**SmartCityCE — CE-3101 Bases de Datos**
 
 Instituto Tecnológico de Costa Rica · 2026
 
